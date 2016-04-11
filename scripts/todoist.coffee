@@ -38,6 +38,10 @@ add_item = (list_name, item, cb) ->
 
     item = clean_urls(item)
 
+    date_string = if item.split(' ')[1] == null then item.split(' ')[0] else item.split(' ')[1]
+    content = if item.split(' ')[1] == null then '' else item.split(' ')[0]
+
+    console.log content, date_string
     request.get('https://todoist.com/API/v6/sync')
       .query({ token: TODOIST_TOKEN, seq_no: 0 })
       .query({
@@ -48,8 +52,8 @@ add_item = (list_name, item, cb) ->
             temp_id: uuid.v4(),
             args: {
               project_id: project.id,
-              content: item.split(' ')[1]
-              date_string: item.split(' ')[0]
+              content: content,
+              date_string: date_string
             }
           }
         ])
