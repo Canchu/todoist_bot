@@ -20,7 +20,7 @@ call_todoist = (on_success) ->
 
 get_items = (list_name, cb) ->
   call_todoist (res) ->
-    project = _.find(res.body.Projects, (project) -> project.name.toLowerCase() == list_name)
+    project = _.find(res.body.Projects, (project) -> project.name == list_name)
     return cb("Unable to find project '#{list_name}'") if !project
 
     project_items = _.filter(res.body.Items, (item) -> item.project_id == project.id)
