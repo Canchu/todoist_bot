@@ -27,13 +27,13 @@ get_items = (list_name, cb) ->
 
     heading = "List '#{project.name}' has #{project_items.length} items:\n"
     output = _.reduce(project_items, (acc, item) ->
-      acc += "#{item.content}\n"
+      acc += "・#{item.date_string} #{item.content}\n"
     ,heading)
     cb(output)
 
 add_item = (list_name, item, cb) ->
   call_todoist (res) ->
-    project = _.find(res.body.Projects, (project) -> project.name.toLowerCase() == list_name)
+    project = _.find(res.body.Projects, (project) -> project.name == list_name)
     return cb("Unable to find project '#{list_name}'") if !project
 
     item = clean_urls(item)
@@ -48,7 +48,8 @@ add_item = (list_name, item, cb) ->
             temp_id: uuid.v4(),
             args: {
               project_id: project.id,
-              content: item
+              content: item.split(' ')[1]
+              date_string: item.split(' ')[0]
             }
           }
         ])
